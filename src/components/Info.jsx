@@ -1,55 +1,72 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import yourVideo from './img/cook1.mp4'; // Adjust the path to your video file
 import { ArrowUpRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger); // Register ScrollTrigger plugin
 
 function Info() {
-    const [scrollY, setScrollY] = useState(0);
-    const [isExiting, setIsExiting] = useState(false); // Track when the transition starts
-    const navigate = useNavigate(); // Initialize useNavigate
+    const [isExiting, setIsExiting] = useState(false);
+    const navigate = useNavigate();
+    const infoRef = useRef(null); // Reference for the Info component
 
     useEffect(() => {
-        const handleScroll = () => {
-            const currentScroll = window.scrollY;
-            setScrollY(currentScroll);
-        };
+        // Create a GSAP ScrollTrigger to control the scrolling behavior
+        const ctx = gsap.context(() => {
+            ScrollTrigger.create({
+                trigger: infoRef.current,
+                start: 'top top', // Start when the top of the section hits the top of the viewport
+                end: 'bottom top', // End when the bottom of the section hits the top of the viewport
+                pin: true, // Pin the section in place
+                onEnter: () => {
+                    document.body.style.overflow = 'hidden'; // Disable scrolling
+                },
+                onLeave: () => {
+                    document.body.style.overflow = 'auto'; // Enable scrolling
+                },
+                onEnterBack: () => {
+                    document.body.style.overflow = 'hidden'; // Disable scrolling when entering back
+                },
+                onLeaveBack: () => {
+                    document.body.style.overflow = 'auto'; // Enable scrolling when leaving back
+                },
+            });
+        }, infoRef); // Use the ref to set up the context
 
-        window.addEventListener('scroll', handleScroll);
-
+        // Cleanup function to remove ScrollTrigger
         return () => {
-            window.removeEventListener('scroll', handleScroll);
+            ctx.revert(); // Revert GSAP context
+            document.body.style.overflow = 'auto'; // Ensure scrolling is enabled on cleanup
         };
     }, []);
 
-    // Handler for the button click to navigate to the Read page
     const handleReadMore = () => {
-        setIsExiting(true); // Start the transition animation
+        setIsExiting(true);
         setTimeout(() => {
-            navigate('/read'); // Redirect to the '/read' page after animation completes
-        }, 1000); // Delay the navigation until the animation finishes
+            navigate('/read');
+        }, 1000);
     };
 
     return (
         <AnimatePresence>
-            {!isExiting && ( // Only render content if the page is not in transition
+            {!isExiting && (
                 <motion.div
-                    style={{ y: scrollY * -0.35 }} // Move up based on scroll
+                    ref={infoRef} // Set the ref here
                     className='relative w-full h-screen overflow-hidden'
-                    exit={{ opacity: 0, y: -100 }} // Animate page exit
+                    exit={{ opacity: 0, y: -50 }} // Animate page exit
                     transition={{ duration: 1 }} // Transition timing
                 >
-                    <div className='flex w-full h-full font-futura'>
-                        {/* Left Side (Header and Paragraph aligned to the top left with padding) */}
+                    <div className='flex w-full h-full font-futura bg-transparent'>
                         <div className='w-1/2 bg-white flex flex-col justify-start items-start p-10'>
-                            <h1 className='text-black flex items-center text-8xl font-futura font-bold uppercase mb-4'>
+                            <h1 className=' flex items-center text-8xl font-futura font-bold uppercase mb-4'>
                                 Our story:
                             </h1>
-
-                            {/* New Button with hover animation and border on hover */}
                             <motion.div
-                                className='mt-6 relative overflow-hidden bg-zinc-900 text-white rounded-full inline-block cursor-pointer border-2 border-transparent'
-                                initial={{ backgroundColor: '#000', color: '#fff', borderColor: 'transparent' }}
+                                className='mt-6 relative overflow-hidden bg-transparent text-white rounded-full inline-block cursor-pointer border-2 border-transparent'
+                                initial={{ backgroundColor: '#ffff', color: '#fff', borderColor: 'transparent' }}
                                 whileHover={{
                                     backgroundColor: '#fff',
                                     color: '#000',
@@ -59,9 +76,8 @@ function Info() {
                                     },
                                 }}
                                 style={{ width: 'auto', padding: '10px 20px', borderWidth: '2px' }}
-                                onClick={handleReadMore} // Add onClick to trigger transition and navigation
+                                onClick={handleReadMore}
                             >
-                                {/* This will animate the background transition from bottom to top */}
                                 <motion.div
                                     initial={{ height: '0%' }}
                                     whileHover={{ height: '100%' }}
@@ -70,19 +86,17 @@ function Info() {
                                     style={{ zIndex: -1 }}
                                 />
                                 <p className='relative z-10 text-sm uppercase font-bold flex items-center'>
-                                    Learn More <ArrowUpRight className="ml-2" /> {/* Arrow icon next to text */}
+                                    Learn More <ArrowUpRight className="ml-2" />
                                 </p>
                             </motion.div>
                         </div>
-
-                        {/* Right Side (Video) */}
-                        <div className='w-1/2 flex justify-center items-center bg-black'>
+                        <div className='w-1/2 flex justify-center items-center bg-transparent'>
                             <video
                                 src={yourVideo}
                                 autoPlay
                                 loop
                                 muted
-                                className='w-full h-full object-cover'
+                                className='w-full h-full bg-transparent object-cover'
                             />
                         </div>
                     </div>

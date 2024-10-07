@@ -1,54 +1,104 @@
-import { ArrowUpRight, SquareArrowOutUpRight } from 'lucide-react';
-import React from 'react';
+import { ArrowUpRight, ChevronsDown, SquareArrowOutUpRight } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import yourVideo from './img/tatto1.mp4'; // Adjust the path to your video file
 
 function LandingPage() {
-  return (
-    <div className='w-full pt-1'>
-      <div className='  mt-52 px-20'>
-        {/* Mapping through the words and rendering them */}
-        {["We build", "different", "websites"].map((item, index) => {
-          return (
-            <div className='masker' key={index}>
-              <div className='w-fit flex items-end overflow-hidden'>
-                {index === 1 && (
-                  <div className='mr-3 w-[10vw] rounded-md h-[4vw] -top-[0.7vw] relative bg-[#E73C37]'>
-                    
-                    <div />
-                  </div>
-                )}
-                {/* Adjusted leading and tracking for better row spacing */}
-                <h1 className=' uppercase font-extrabold text-9xl font-futura leading-[1] tracking-tight'>
-                  {item}
-                </h1>
-              </div>
-            </div>
-          );
-        })}
+  const [scrollY, setScrollY] = useState(0);
 
-        {/* "Start the project" button below the text */}
-        <div className='start flex items-center gap-2 mt-10'>
-          <div  className='px-5 py-2 bg-zinc-800 uppercase text-sm text-white font-bold rounded-full flex items-center'>
-            Start the project
-          </div>
-          <div className='w-10 h-10 rounded-full bg-zinc-800 text-white flex items-center justify-center'>
-            <ArrowUpRight />
-          </div>
-        </div>
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScroll = window.scrollY;
+      setScrollY(currentScroll);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  return (
+    <motion.div className="w-full pt-1 relative overflow-hidden">
+      {/* Background Video */}
+      <div className="absolute inset-0 -z-15 w-full  overflow-hidden">
+        <video
+          className="w-full h-full object-cover "
+          autoPlay
+          loop
+          muted
+          playsInline
+        >
+          <source src={yourVideo} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
       </div>
 
+      {/* Main Content */}
+      <div className="py-40 px-20 relative z-10">
+        {/* Inkspire Text */}
+        <h1 className="uppercase font-normal text-[10em] text-transparent font-futura  tracking-tight">
+          Inkspire
+        </h1>
+
+        {/* "Start the project" button below the text */}
+        <div className="start flex items-center gap-2 mt-10">
+          <div className="px-5 py-2 border uppercase gap-2 text-sm text-white font-bold rounded flex items-center">
+          Ink Your Story
+            <div className="w-5 h-5 text-white flex items-center justify-center">
+              <ArrowUpRight />
+            </div>
+          </div>
+        </div>
+       
+      </div> <div className='bg-transparent'>
+          <FlashingText />
+
+        </div>
+
+      {/* Flashing text with down arrow */}
+     
+
       {/* Rest of the content below */}
-      <div className='border-t-[1px] border-zinc-300 font-roboto mt-20 flex justify-between items-center py-5 px-20'>
-        {["For public and private companies", "From the first pitch to IPO"].map((item, index) => (
-          <div className='flex items-center' key={index}>
-            <p className='text-md font-semibold tracking-tight leading-none flex items-center'>
-              {item}
-            </p>
-            <SquareArrowOutUpRight className='ml-2' />
+      <div className="border-t-[1px] border-zinc-300 font-roboto mt-20 flex justify-between items-center py-5 px-20">
+        {["Ink Journey" , "From the first pitch to IPO"].map((item, index) => (
+          <div className="flex items-center" key={index}>
+            {typeof item === 'string' ? (
+              <p className="text-md font-semibold tracking-tight leading-none flex items-center">
+                {item}
+                <SquareArrowOutUpRight className="ml-2" />
+              </p>
+            ) : (
+              item
+            )}
           </div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }
+
+// Flashing text component
+// Flashing text component
+const FlashingText = () => (
+  <motion.div className="flex flex-col items-center bg-transparent">
+    <motion.span
+      className="flashing-text text-md font-semibold tracking-tight leading-none bg-transparent text-white"
+      animate={{ opacity: [1, 0.5, 1] }}
+      transition={{ duration: 1, repeat: Infinity }}
+    >
+      Scroll down
+    </motion.span>
+    <motion.div
+      className="mt-1 flex items-center justify-center bg-transparent"
+      animate={{ opacity: [1, 0.5, 1], y: [0, 4, 0] }}
+      transition={{ duration: 1, repeat: Infinity }}
+    >
+      <ChevronsDown className="text-md bg-transparent text-white" />
+    </motion.div>
+  </motion.div>
+);
+
 
 export default LandingPage;

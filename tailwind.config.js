@@ -11,6 +11,8 @@ export default {
         bowlby: ['Bowlby One SC', 'sans-serif'],
         nunito: ['Nunito', 'sans-serif'],
         futura: ['Futura Now Headline', 'sans-serif'],
+        manrope: ['Manrope', 'sans-serif'],
+        raleway: ['Raleway', 'sans-serif'],
 
       
 

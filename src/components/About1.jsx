@@ -46,9 +46,9 @@ function About() {
       style={{ y: scrollY * -0.4 }} // Apply vertical scroll effect to the entire container
       className='w-full h-screen bg-[#bb4b90] overflow-hidden '
     >
-      <div className='w-full flex flex-col justify-center items-center '>
+      <div className='w-full flex  justify-center items-center '>
         <motion.h1
-          className='text-[1vw] text-white font-bold uppercase leading-none'
+          className='text-sm text-white font-bold uppercase leading-none'
           initial="hidden"
           whileInView="visible"
           exit="hidden"
@@ -59,7 +59,7 @@ function About() {
           DesignLab was born from the mind of a curious web designer, Alex, who spent years exploring the boundaries of creativity in web design. While working on various projects, Alex often felt constrained by traditional design norms and sought a platform that celebrated the unconventional. Frustrated by the lack of a
         </motion.h1>
         <motion.h1
-          className='text-[10vw] text-white font-bold uppercase leading-none'
+          className='text-2xl text-white font-bold uppercase leading-none'
           initial="hidden"
           whileInView="visible"
           exit="hidden"
@@ -70,7 +70,7 @@ function About() {
           we are designlabs
         </motion.h1>
         <motion.h1
-          className='text-[10vw] text-white font-bold uppercase leading-none'
+          className='text-2xl text-white font-bold uppercase leading-none'
           initial="hidden"
           whileInView="visible"
           exit="hidden"

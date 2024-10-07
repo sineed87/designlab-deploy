@@ -19,10 +19,10 @@ function About() {
 
   return (
     <motion.div 
-    style={{ y: scrollY * -0.3 }}
+    style={{ y: scrollY * 0.05 }}
       // Move the entire Marquee vertically on scroll
        // Faster vertical movement by adjusting multiplier
-      className='w-full h-[200]  bg-[#4bbb5e] overflow-hidden flex items-center justify-center  '
+      className='w-full h-[200]  bg-black overflow-hidden flex items-center justify-center  '
     >
       {/* Keep the horizontal scroll effect */}
       <motion.div
